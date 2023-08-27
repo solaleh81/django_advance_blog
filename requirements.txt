@@ -1,0 +1,11 @@
+ Django>=3.2,<3.3
+ python-decouple
+ pillow
+ djangorestframework
+ markdown
+ django-filter
+
+
+ #for testting
+
+ pytest
