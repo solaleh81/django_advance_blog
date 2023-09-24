@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .serializers import RegisterationSerializer
+from .serializers import RegistrationSerializer
 
 
 class RegistrationApiView(generics.GenericAPIView):
