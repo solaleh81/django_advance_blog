@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -28,6 +29,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 class CustomAuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField(label=_("Email"), write_only=True)
+
     password = serializers.CharField(
         label=_("Password"),
         style={"input_type": "password"},
@@ -59,3 +61,10 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 
         attrs["user"] = user
         return attrs
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        validated_data = super().validate(attrs)
+        validated_data["test"] = "test"
+        return validated_data
