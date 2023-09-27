@@ -101,11 +101,11 @@ class PostDetail(RetrieveAPIView, UpdateAPIView, DestroyAPIView):
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ["author", "category"]
+    ordering_fields = ["title", "content"]
     pagination_class = DefaultPagination
 
 

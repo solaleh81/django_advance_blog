@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "blog",
     "django_filters",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
 ]
 
 MIDDLEWARE = [
@@ -158,5 +159,15 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
 }
