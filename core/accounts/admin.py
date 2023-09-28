@@ -8,8 +8,18 @@ from accounts.models.profiles import Profile
 
 class CustomUserAdmin(admin.ModelAdmin):
     model = User
-    list_display = ("email", "is_superuser", "is_active")
-    list_filter = ("email", "is_superuser", "is_active")
+    list_display = (
+        "email",
+        "is_superuser",
+        "is_active",
+        "is_verified",
+    )
+    list_filter = (
+        "email",
+        "is_superuser",
+        "is_active",
+        "is_verified",
+    )
     search_fields = ("email",)
     ordering = ("email",)
     fieldsets = (
@@ -26,6 +36,7 @@ class CustomUserAdmin(admin.ModelAdmin):
                     "is_staff",
                     "is_active",
                     "is_superuser",
+                    "is_verified",
                 ),
             },
         ),
@@ -52,9 +63,11 @@ class CustomUserAdmin(admin.ModelAdmin):
             "fields": (
                 "email",
                 "password1",
-                "password2" "is_staff",
+                "password2",
+                "is_staff",
                 "is_active",
                 "is_superuser",
+                "is_verified",
             ),
         },
     )

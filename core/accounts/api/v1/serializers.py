@@ -58,6 +58,8 @@ class CustomAuthTokenSerializer(serializers.Serializer):
             if not user:
                 msg = _("Unable to log in with provided credentials.")
                 raise serializers.ValidationError(msg, code="authorization")
+            if not user.is_verified:
+                raise serializers.ValidationError({"detail": "user is not verified."})
         else:
             msg = _('Must include "username" and "password".')
             raise serializers.ValidationError(msg, code="authorization")
@@ -69,6 +71,8 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         validated_data = super().validate(attrs)
+        if not self.user.is_verified:
+            raise serializers.ValidationError({"detail": "user is not verified."})
         validated_data["test"] = "test"
         return validated_data
 
