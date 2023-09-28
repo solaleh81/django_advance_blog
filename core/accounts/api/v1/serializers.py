@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from accounts.models import User
+from accounts.models import User, Profile
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -83,3 +83,11 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"detail": "new_password doesnt match!"})
 
         return super().validate(attrs)
+
+
+class ProfileApiSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source="user.email")
+
+    class Meta:
+        model = Profile
+        fields = ("user", "email", "first_name", "last_name", "image", "description")
