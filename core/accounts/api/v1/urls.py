@@ -12,6 +12,11 @@ urlpatterns = [
     # registration
     path("registration/", views.RegistrationApiView.as_view(), name="registration"),
     # change password
+    path(
+        "change_password/",
+        views.ChangePasswordApiView.as_view(),
+        name="change_password",
+    ),
     # reset password
     # login token
     path("token/login/", views.CustomObtainTokenView.as_view(), name="token-login"),

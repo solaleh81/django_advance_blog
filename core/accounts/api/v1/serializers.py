@@ -1,3 +1,4 @@
+from asyncio import exceptions
 from logging import exception
 from rest_framework import serializers
 from ...models import User
@@ -7,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from accounts.models import User
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -68,3 +71,15 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         validated_data = super().validate(attrs)
         validated_data["test"] = "test"
         return validated_data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    new_password1 = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs.get("new_password") != attrs.get("new_password1"):
+            raise serializers.ValidationError({"detail": "new_password doesnt match!"})
+
+        return super().validate(attrs)
