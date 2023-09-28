@@ -1,7 +1,7 @@
 from asyncio import exceptions
 from logging import exception
 from rest_framework import serializers
-from ...models import User
+from accounts.models.users import User
 
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
