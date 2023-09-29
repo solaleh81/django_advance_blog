@@ -9,3 +9,7 @@
  #for testting
 
  pytest
+
+
+ # Email backends
+ django-mail-templated
