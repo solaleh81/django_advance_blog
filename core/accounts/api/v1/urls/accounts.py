@@ -11,6 +11,11 @@ from rest_framework.permissions import IsAuthenticated
 urlpatterns = [
     # registration
     path("registration/", views.RegistrationApiView.as_view(), name="registration"),
+    path("test-email/", views.TestEmailSend.as_view(), name="test-email"),
+    # activation
+    # path("activation/confirm/", views.ActivationView.as_view(), name
+    # resend Activathon
+    # path("activation/resend/", views.ResendView.as_view(),
     # change password
     path(
         "change_password/",
