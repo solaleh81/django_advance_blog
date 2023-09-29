@@ -13,7 +13,11 @@ urlpatterns = [
     path("registration/", views.RegistrationApiView.as_view(), name="registration"),
     path("test-email/", views.TestEmailSend.as_view(), name="test-email"),
     # activation
-    # path("activation/confirm/", views.ActivationView.as_view(), name
+    path(
+        "activation/confirm/<str:token>",
+        views.ActivationApiView.as_view(),
+        name="activation",
+    ),
     # resend Activathon
     # path("activation/resend/", views.ResendView.as_view(),
     # change password
