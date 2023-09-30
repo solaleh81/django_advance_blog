@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.response import Response
@@ -19,6 +20,8 @@ from ...models import Profile
 from mail_templated import EmailMessage
 from accounts.api.utils import EmailThread
 from rest_framework_simplejwt.tokens import RefreshToken
+import jwt
+from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
 from django.contrib.auth import get_user_model
 
@@ -133,6 +136,18 @@ class TestEmailSend(generics.GenericAPIView):
 
 class ActivationApiView(APIView):
     def get(self, request, token, *args, **kwargs):
+        try:
+            token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        except ExpiredSignatureError:
+            return Response(
+                {"details": "Token has been expired."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except InvalidSignatureError:
+            return Response(
+                {"details": "Token is not valid."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         print(token)
         print(kwargs)
         print(args)
