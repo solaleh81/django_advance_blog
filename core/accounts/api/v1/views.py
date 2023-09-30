@@ -9,6 +9,7 @@ from .serializers import (
     CustomAuthTokenSerializer,
     CustomTokenObtainPairSerializer,
     ProfileApiSerializer,
+    ActivationResendSerializer,
 )
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -138,6 +139,7 @@ class ActivationApiView(APIView):
     def get(self, request, token, *args, **kwargs):
         try:
             token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user_id = token.get("user_id")
         except ExpiredSignatureError:
             return Response(
                 {"details": "Token has been expired."},
@@ -148,7 +150,39 @@ class ActivationApiView(APIView):
                 {"details": "Token is not valid."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        print(token)
-        print(kwargs)
-        print(args)
-        return Response(token)
+        user_obj = User.objects.get(pk=user_id)
+        if user_obj.is_verified:
+            return Response({"details": "your account has already been verified."})
+        user_obj.save()
+        return Response(
+            {"details": "your account has been verified and activated successfully."}
+        )
+
+
+class ActivationResendApiView(generics.GenericAPIView):
+    serializer_class = ActivationResendSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = ActivationResendSerializer(data=request.data)
+        if serializer.is_valid():
+            user_obj = serializer.validated_data["user"]
+            token = self.get_tokens_for_user(user_obj)
+            email_obj = EmailMessage(
+                "email/hello.tpl",
+                {"token": token},
+                "admin@admin.com",
+                to=[user_obj.email],
+            )
+            EmailThread(email_obj).start()
+            return Response(
+                {"details": "user activation resend successfully."},
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"details": "request failed."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def get_tokens_for_user(self, user):
+        refresh = RefreshToken.for_user(user)
+        return str(refresh.access_token)

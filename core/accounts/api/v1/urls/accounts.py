@@ -19,7 +19,11 @@ urlpatterns = [
         name="activation",
     ),
     # resend Activathon
-    # path("activation/resend/", views.ResendView.as_view(),
+    path(
+        "activation/resend/",
+        views.ActivationResendApiView.as_view(),
+        name="activation-resnd",
+    ),
     # change password
     path(
         "change_password/",
